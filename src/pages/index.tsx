@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
-import Editor from '@/components/ui/editor';
 import Input from '@/components/ui/input';
+import MarkdownEditor from '@/components/ui/markdownEditor';
 import getConfig from 'next/config';
 import { FaGithub } from 'react-icons/fa';
 
@@ -29,10 +29,11 @@ export default function Index() {
           type="password"
           className="mb-10 w-[300px]"
         />
-        <Editor className="mb-10" />
-        <Button>Create</Button>
-        <Button disabled>Create</Button>
-        <Button loading>Create</Button>
+        <MarkdownEditor
+          label="Write a note..."
+          className="mb-10"
+        />
+        <Button>Save</Button>
       </div>
     </div>
   );

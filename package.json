@@ -14,8 +14,8 @@
     "node": ">=16.14"
   },
   "dependencies": {
-    "@mdxeditor/editor": "^0.15.1",
     "@tanstack/react-query": "^4.32.6",
+    "@toast-ui/react-editor": "^3.2.3",
     "@trpc/client": "^10.37.1",
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",

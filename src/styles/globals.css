@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '../components/ui/editor/mdxEditor.css';
+@import '../components/ui/markdownEditor.css';
 
 html,
 body {
