@@ -14,6 +14,7 @@
     "node": ">=16.14"
   },
   "dependencies": {
+    "@mdxeditor/editor": "^0.15.1",
     "@tanstack/react-query": "^4.32.6",
     "@trpc/client": "^10.37.1",
     "@trpc/next": "^10.37.1",
@@ -22,13 +23,14 @@
     "classnames": "^2.3.2",
     "next": "^12.3.4",
     "react": "^18.2.0",
+    "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/node": "^20.5.1",
-    "@types/react": "^18.2.20",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",

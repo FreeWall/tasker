@@ -1,4 +1,5 @@
 import Button from '@/components/ui/button';
+import Editor from '@/components/ui/editor';
 import Input from '@/components/ui/input';
 import getConfig from 'next/config';
 import { FaGithub } from 'react-icons/fa';
@@ -21,14 +22,17 @@ export default function Index() {
         <h1 className="mb-6 text-2xl font-bold sm:mb-8 sm:text-3xl">Tasker</h1>
         <Input
           label="Username"
-          className="mb-6 w-[200px]"
+          className="mb-6 w-[300px]"
         />
         <Input
           label="Password"
           type="password"
-          className="mb-10 w-[200px]"
+          className="mb-10 w-[300px]"
         />
+        <Editor className="mb-10" />
         <Button>Create</Button>
+        <Button disabled>Create</Button>
+        <Button loading>Create</Button>
       </div>
     </div>
   );

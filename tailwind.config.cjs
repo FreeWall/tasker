@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   plugins: ['prettier-plugin-tailwindcss'],
   theme: {
+    fontFamily: {
+      sans: 'Inter',
+    },
     extend: {
       colors: {
         main: '#292e33',
@@ -11,6 +14,8 @@ module.exports = {
         body: '#ced1d5',
         conversion: '#2E88B0',
         conversionHover: '#287090',
+        conversionText: '#38A1CF',
+        placeholder: '#858688',
       },
     },
   },

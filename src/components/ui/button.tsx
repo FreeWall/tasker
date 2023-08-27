@@ -13,11 +13,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'relative flex select-none items-center rounded border-conversion bg-conversion p-2.5 px-4 font-bold text-white transition-[padding] duration-300 hover:border-conversionHover hover:bg-conversionHover active:brightness-90',
+          'relative flex select-none items-center rounded border-conversion bg-conversion p-3.5 px-5 text-sm font-bold uppercase text-white transition-[padding] duration-300 hover:border-conversionHover hover:bg-conversionHover active:brightness-90',
           {
-            'pointer-events-none bg-conversionHover pr-12 brightness-75':
-              loading,
-            'pointer-events-none brightness-75 grayscale': disabled,
+            'pointer-events-none bg-conversionHover pr-12': loading,
+            'pointer-events-none grayscale': disabled,
           },
           className,
         )}
@@ -33,7 +32,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               'opacity-0': !loading,
             },
           )}
-          size={24}
+          size={22}
         />
       </button>
     );

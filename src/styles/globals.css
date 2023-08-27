@@ -1,11 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '../components/ui/editor/mdxEditor.css';
 
 html,
 body {
   font-family: 'Inter', sans-serif;
-  @apply bg-main antialiased text-body;
+  @apply bg-main text-body antialiased;
 }
 
 #__next {
