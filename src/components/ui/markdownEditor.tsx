@@ -1,71 +1,84 @@
-import type Editor from '@toast-ui/editor';
+import type { Editor } from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import cn from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 
 function Loader() {
   return (
-    <div className="relative h-[210px] overflow-hidden rounded bg-darker !p-4"></div>
+    <div className="relative h-[200px] overflow-hidden rounded bg-darker !p-4"></div>
   );
 }
 
-/* const TuiEditor = dynamic(
-  async () => (await import('@toast-ui/editor')).Editor,
-  {
-    ssr: false,
-  },
-); */
-
-export default function MarkdownEditor(props: {
+interface MarkdownEditorProps {
   defaultValue?: string;
   readOnly?: boolean;
   onChange?: (value: string) => void;
   className?: string;
   label?: string;
-}) {
-  const [loaded, setLoaded] = useState(false);
-  const rootRef = useRef(null);
-  const editor = useRef<Editor>();
-
-  useEffect(() => {
-    (async () => {
-      const Editor = (await import('@toast-ui/editor')).Editor;
-      editor.current = new Editor({
-        el: rootRef.current!,
-        initialEditType: 'wysiwyg',
-        hideModeSwitch: true,
-        theme: 'dark',
-        minHeight: '150px',
-        height: 'auto',
-        placeholder: props.label,
-        toolbarItems: [
-          ['bold', 'italic', 'strike'],
-          ['heading', 'hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['code', 'codeblock'],
-        ],
-        events: {
-          load: () => {
-            setLoaded(true);
-          },
-          change: () => {
-            console.log(editor.current?.getMarkdown());
-          },
-        },
-      });
-    })();
-  }, []);
-
-  return (
-    <div className={cn('relative', props.className)}>
-      {/* {props.label && (
-        <label className="pointer-events-none absolute -top-1.5 left-0 z-10 flex h-full w-full select-none pl-3.5 text-[13px] font-normal leading-[0.75] text-placeholder ">
-          {props.label}
-        </label>
-      )} */}
-
-      {!loaded && <Loader />}
-      <div ref={rootRef}></div>
-    </div>
-  );
 }
+
+const MarkdownEditor = forwardRef<Editor, MarkdownEditorProps>(
+  (props, editorFwdRef) => {
+    const [loaded, setLoaded] = useState(false);
+    const rootRef = useRef(null);
+    const editorRef = useRef<Editor>();
+
+    useEffect(() => {
+      (async () => {
+        const Editor = (await import('@toast-ui/editor')).Editor;
+
+        editorRef.current = new Editor({
+          el: rootRef.current!,
+          initialEditType: 'wysiwyg',
+          hideModeSwitch: true,
+          theme: 'dark',
+          minHeight: '150px',
+          height: 'auto',
+          initialValue: props.defaultValue,
+          placeholder: props.label,
+          toolbarItems: [
+            ['heading'],
+            ['bold', 'italic', 'strike'],
+            ['ul', 'ol', 'task', 'indent', 'outdent'],
+            ['quote', 'hr'],
+            ['code', 'codeblock'],
+          ],
+          events: {
+            load: () => {
+              setLoaded(true);
+            },
+            change: () => {
+              editorRef.current &&
+                props.onChange?.(editorRef.current.getMarkdown());
+            },
+          },
+        });
+
+        if (typeof editorFwdRef === 'function') {
+          editorFwdRef(editorRef.current);
+        } else if (editorFwdRef) {
+          editorFwdRef.current = editorRef.current;
+        }
+      })();
+
+      return () => {
+        editorRef.current?.destroy();
+      };
+    }, [editorFwdRef, props.defaultValue, props.label, props.onChange]);
+
+    return (
+      <div className={cn('relative', props.className)}>
+        {!loaded && <Loader />}
+        <div
+          className={cn({ 'pointer-events-none absolute opacity-0': !loaded })}
+        >
+          <div ref={rootRef}></div>
+        </div>
+      </div>
+    );
+  },
+);
+
+MarkdownEditor.displayName = 'MarkdownEditor';
+
+export default MarkdownEditor;

@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.32.6",
-    "@toast-ui/react-editor": "^3.2.3",
+    "@toast-ui/editor": "^3.2.2",
     "@trpc/client": "^10.37.1",
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",

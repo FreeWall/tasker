@@ -1,12 +1,18 @@
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import MarkdownEditor from '@/components/ui/markdownEditor';
+import MarkdownViewer from '@/components/ui/markdownViewer';
+import type Editor from '@toast-ui/editor';
 import getConfig from 'next/config';
+import { useRef, useState } from 'react';
 import { FaGithub } from 'react-icons/fa';
 
 const { publicRuntimeConfig } = getConfig();
 
 export default function Index() {
+  const editorRef = useRef<Editor>(null);
+  const [markdown, setMarkdown] = useState('');
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="absolute right-0 top-0">
@@ -30,10 +36,24 @@ export default function Index() {
           className="mb-10 w-[300px]"
         />
         <MarkdownEditor
+          ref={editorRef}
+          className="mb-10 w-[680px]"
           label="Write a note..."
-          className="mb-10"
+          onChange={setMarkdown}
         />
-        <Button>Save</Button>
+
+        <MarkdownViewer
+          value={markdown}
+          className="mb-10 flex w-[680px] cursor-pointer rounded border border-transparent bg-darker p-4 px-6 hover:border-conversion"
+        />
+
+        <Button
+          onClick={() => {
+            console.log(editorRef.current?.getMarkdown());
+          }}
+        >
+          Save
+        </Button>
       </div>
     </div>
   );
