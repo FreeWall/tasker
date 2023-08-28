@@ -14,7 +14,7 @@ module.exports = {
         body: '#ced1d5',
         conversion: '#2E88B0',
         conversionHover: '#287090',
-        conversionText: '#38A1CF',
+        conversionText: '#40B4E8',
         placeholder: '#858688',
       },
     },

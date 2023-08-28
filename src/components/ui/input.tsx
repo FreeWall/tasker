@@ -1,5 +1,6 @@
 import cn from 'classnames';
-import React, { InputHTMLAttributes, useId } from 'react';
+import React, { InputHTMLAttributes, useId, useState } from 'react';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -7,8 +8,12 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className = 'block', name, type = 'text', label, ...rest }, ref) => {
+  (
+    { className = 'block', name, type: defaultType = 'text', label, ...rest },
+    ref,
+  ) => {
     const id = useId();
+    const [type, setType] = useState(defaultType);
 
     return (
       <div className={cn('relative h-12', className)}>
@@ -21,6 +26,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           placeholder=""
           {...rest}
         />
+        {defaultType == 'password' && (
+          <div
+            className="absolute right-0 top-0 flex h-full cursor-pointer items-center p-3 text-xl text-placeholder hover:text-body"
+            onClick={() => setType(type == 'text' ? 'password' : 'text')}
+          >
+            {type == 'text' && <FaRegEyeSlash />}
+            {type == 'password' && <FaRegEye />}
+          </div>
+        )}
         {label && (
           <label
             htmlFor={id}

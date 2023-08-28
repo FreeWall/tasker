@@ -1,7 +1,7 @@
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
-import MarkdownEditor from '@/components/ui/markdownEditor';
-import MarkdownViewer from '@/components/ui/markdownViewer';
+import MarkdownEditor from '@/components/ui/markdown/editor';
+import MarkdownViewer from '@/components/ui/markdown/viewer';
 import type Editor from '@toast-ui/editor';
 import getConfig from 'next/config';
 import { useRef, useState } from 'react';
@@ -11,7 +11,16 @@ const { publicRuntimeConfig } = getConfig();
 
 export default function Index() {
   const editorRef = useRef<Editor>(null);
-  const [markdown, setMarkdown] = useState('');
+  const [markdown, setMarkdown] = useState('bagr s lopatou');
+  const [edit, setEdit] = useState(false);
+
+  const viewer = (
+    <MarkdownViewer
+      value={markdown}
+      className="mb-10 flex w-[680px] cursor-pointer rounded border border-dashed border-transparent bg-darker p-4 px-6 "
+      onClick={() => setEdit(true)}
+    />
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -35,17 +44,19 @@ export default function Index() {
           type="password"
           className="mb-10 w-[300px]"
         />
-        <MarkdownEditor
-          ref={editorRef}
-          className="mb-10 w-[680px]"
-          label="Write a note..."
-          onChange={setMarkdown}
-        />
 
-        <MarkdownViewer
-          value={markdown}
-          className="mb-10 flex w-[680px] cursor-pointer rounded border border-transparent bg-darker p-4 px-6 hover:border-conversion"
-        />
+        {edit && (
+          <MarkdownEditor
+            ref={editorRef}
+            className="mb-10 w-[680px]"
+            label="Write a note..."
+            defaultValue={markdown}
+            onChange={setMarkdown}
+            loader={viewer}
+          />
+        )}
+
+        {!edit && viewer}
 
         <Button
           onClick={() => {

@@ -1,7 +1,7 @@
 import type { Editor } from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import cn from 'classnames';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { ReactNode, forwardRef, useEffect, useRef, useState } from 'react';
 
 function Loader() {
   return (
@@ -15,6 +15,7 @@ interface MarkdownEditorProps {
   onChange?: (value: string) => void;
   className?: string;
   label?: string;
+  loader?: ReactNode;
 }
 
 const MarkdownEditor = forwardRef<Editor, MarkdownEditorProps>(
@@ -64,11 +65,11 @@ const MarkdownEditor = forwardRef<Editor, MarkdownEditorProps>(
       return () => {
         editorRef.current?.destroy();
       };
-    }, [editorFwdRef, props.defaultValue, props.label, props.onChange]);
+    }, [editorFwdRef, props.label, props.onChange]);
 
     return (
       <div className={cn('relative', props.className)}>
-        {!loaded && <Loader />}
+        {!loaded && (props.loader ?? <Loader />)}
         <div
           className={cn({ 'pointer-events-none absolute opacity-0': !loaded })}
         >
