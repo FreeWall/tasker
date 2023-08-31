@@ -5,6 +5,10 @@ export default withAuth({
     authorized({ req, token }) {
       console.log('dfgfdg');
       console.log(token);
+      if (req.nextUrl.pathname.startsWith('/auth/')) {
+        return true;
+      }
+
       return !!token;
     },
   },

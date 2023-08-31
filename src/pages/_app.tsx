@@ -9,11 +9,7 @@ const App: AppType<{ session: Session }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider
-      session={session}
-      basePath="/fdgfd"
-      baseUrl="dfgfd"
-    >
+    <SessionProvider session={session}>
       <Head>
         <meta
           name="viewport"
