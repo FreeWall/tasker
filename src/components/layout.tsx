@@ -12,7 +12,7 @@ export default function Layout(props: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       {data?.user && (
-        <div className="absolute right-0 top-0 flex items-center p-3 sm:p-7">
+        <div className="absolute right-0 top-0 z-10 flex items-center p-3 sm:p-7">
           <div className="font-bold">{data.user.username}</div>
           <div className="ml-4">
             <FaSignOutAlt
@@ -23,7 +23,7 @@ export default function Layout(props: LayoutProps) {
           </div>
         </div>
       )}
-      <div className="absolute bottom-0 right-0">
+      <div className="fixed bottom-0 right-0">
         <a
           href={publicRuntimeConfig?.repository}
           target="_blank"

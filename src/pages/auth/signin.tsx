@@ -68,7 +68,7 @@ export default function SignIn() {
         <div className="flex items-center justify-between">
           <Button
             loading={formStatus == 'loading' || formStatus == 'success'}
-            onClick={() => login()}
+            onClick={login}
           >
             Login
           </Button>

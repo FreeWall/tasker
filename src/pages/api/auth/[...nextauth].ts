@@ -16,6 +16,7 @@ export const authOptions: NextAuthOptions = {
       return {
         expires: session.expires,
         user: {
+          id: user?.id as string,
           username: user?.username as string,
         },
       };

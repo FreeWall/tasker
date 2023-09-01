@@ -1,31 +1,67 @@
-import Button from '@/components/ui/button';
+import Task from '@/components/task';
+import TaskForm from '@/components/task/form';
 import Input from '@/components/ui/input';
-import MarkdownField from '@/components/ui/markdown/field';
-import type { Editor } from '@toast-ui/editor';
+import { trpc } from '@/utils/trpc';
+import type Prisma from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
-import { useRef } from 'react';
+import { useState } from 'react';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Index() {
-  const markdownRef = useRef<Editor>(null);
+  const taskList = trpc.task.list.useQuery();
+  const [formVisible, setFormVisible] = useState(false);
+  const [formTask, setFormTask] = useState<Prisma.Task>();
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-bold sm:mb-8 sm:text-3xl">Tasker</h1>
-      <Input
-        label="Title"
-        className="mb-6 w-[300px]"
-      />
-      <MarkdownField ref={markdownRef} />
+    <div className="relative">
+      <h1 className="mb-10 text-2xl font-bold sm:text-3xl">Tasker</h1>
+      {!formVisible && (
+        <div className="absolute left-1/2 top-0 w-1/3 -translate-x-1/2">
+          <Input
+            className="w-full"
+            label="Write a task..."
+            readOnly
+            onFocus={(e) => {
+              e.target.blur();
+              setFormTask(undefined);
+              setFormVisible(true);
+            }}
+          />
+        </div>
+      )}
 
-      <Button
-        onClick={() => {
-          console.log(markdownRef.current?.getMarkdown());
-        }}
-      >
-        Save
-      </Button>
+      {taskList.status == 'success' && taskList.data?.tasks.length == 0 && (
+        <div className="py-32 text-center text-2xl text-placeholder">
+          No tasks yet
+        </div>
+      )}
+
+      {taskList.data?.tasks && (
+        <div className="flex flex-wrap">
+          {taskList.data?.tasks.map((task, idx) => (
+            <Task
+              key={idx}
+              task={task}
+              onClick={() => {
+                setFormTask(task);
+                setFormVisible(true);
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {formVisible && (
+        <TaskForm
+          task={formTask}
+          onClickOutside={() => setFormVisible(false)}
+          onDone={() => {
+            setFormVisible(false);
+            taskList.refetch();
+          }}
+        />
+      )}
     </div>
   );
 }

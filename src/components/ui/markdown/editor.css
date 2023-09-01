@@ -1,3 +1,7 @@
+.ProseMirror .placeholder {
+  @apply !text-placeholder;
+}
+
 .toastui-editor-dark.toastui-editor-defaultUI {
   border: 0 none;
   color: #eee;
@@ -14,7 +18,10 @@
 }
 
 .toastui-editor-dark .toastui-editor-toolbar {
+  position: sticky;
+  top: 0px;
   height: auto;
+  z-index: 100;
 }
 
 .toastui-editor-dark .toastui-editor-toolbar-icons {
