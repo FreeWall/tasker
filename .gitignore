@@ -9,7 +9,6 @@ next-env.d.ts
 
 # local env files
 .env
-.env.local
 
 # vercel
 .vercel

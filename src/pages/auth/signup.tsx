@@ -83,7 +83,7 @@ export default function SignUp() {
         <div className="flex items-center justify-between">
           <Button
             loading={formStatus == 'loading' || formStatus == 'success'}
-            onClick={() => register()}
+            onClick={register}
           >
             Sign up
           </Button>

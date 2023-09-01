@@ -9,7 +9,7 @@ interface MarkdownViewerProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const MarkdownViewer = forwardRef<HTMLDivElement, MarkdownViewerProps>(
-  (props, fwdRef) => {
+  ({ value, className, ...rest }, fwdRef) => {
     const rootRef = useRef(null);
     const viewerRef = useRef<Viewer>();
 
@@ -22,7 +22,7 @@ const MarkdownViewer = forwardRef<HTMLDivElement, MarkdownViewerProps>(
         viewerRef.current = new Viewer({
           el: rootRef.current!,
           theme: 'dark',
-          initialValue: props.value,
+          initialValue: value,
           events: {
             load: () => {},
           },
@@ -32,13 +32,13 @@ const MarkdownViewer = forwardRef<HTMLDivElement, MarkdownViewerProps>(
       return () => {
         viewerRef.current?.destroy();
       };
-    }, [props]);
+    }, [value]);
 
     return (
       <div
-        className={cn(props.className)}
+        className={cn(className)}
         ref={fwdRef}
-        {...props}
+        {...rest}
       >
         <div
           ref={rootRef}

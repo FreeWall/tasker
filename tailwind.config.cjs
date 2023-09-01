@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  plugins: ['prettier-plugin-tailwindcss'],
+  plugins: [
+    'prettier-plugin-tailwindcss',
+    require('@neojp/tailwindcss-line-clamp-utilities'),
+  ],
   theme: {
     fontFamily: {
       sans: 'Inter',
