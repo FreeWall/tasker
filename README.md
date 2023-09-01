@@ -1,5 +1,6 @@
 # Tasker
 
+![](https://wakatime.com/badge/user/d694f266-3f1b-44cd-82b9-e9c093472e23/project/120c30f1-4700-4e08-9532-20b2888c583a.svg)
 [![](https://img.shields.io/github/deployments/FreeWall/tasker/Production?logo=vercel&label=vercel)](https://tasker.michalvanek.cz/)
 
 > ## Vytvořte fullstack webovou aplikaci v TypeScriptu na vytváření a správu úkolů
@@ -50,7 +51,8 @@ cd tasker
 npm run deploy
 ```
 
-Server is started on port 3000, visit http://localhost:3000/
+Server is started on port 3000, visit http://localhost:3000/<br/>
+(Postgres DB is hosted and preconfigured on Vercel hosting, credentials in `.env.local`)
 
 ### Vercel
 
