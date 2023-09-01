@@ -6,6 +6,7 @@ import type Prisma from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import { useState } from 'react';
+import { CgSpinner } from 'react-icons/cg';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Index() {
@@ -27,6 +28,15 @@ export default function Index() {
               setFormTask(undefined);
               setFormVisible(true);
             }}
+          />
+        </div>
+      )}
+
+      {taskList.status == 'loading' && (
+        <div className="flex justify-center py-32 text-2xl text-placeholder">
+          <CgSpinner
+            className="animate-spin text-placeholder"
+            size={48}
           />
         </div>
       )}

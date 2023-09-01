@@ -27,7 +27,7 @@ export default router({
     )
     .mutation(async ({ input, ctx: { session } }) => {
       if (input.id) {
-        await prisma.task.update({
+        const task = await prisma.task.update({
           where: {
             id: input.id,
             userId: session?.user.id,
@@ -38,10 +38,10 @@ export default router({
             userId: session?.user.id as string,
           },
         });
-        return;
+        return task;
       }
 
-      await prisma.task.create({
+      return await prisma.task.create({
         data: {
           title: input.title ?? '',
           content: input.content ?? '',

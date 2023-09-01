@@ -20,6 +20,7 @@ export default function TaskForm(props: TaskFormProps) {
 
   const [valid, setValid] = useState(false);
 
+  const utils = trpc.useContext();
   const createTask = trpc.task.createOrUpdate.useMutation();
   const removeTask = trpc.task.remove.useMutation();
 
@@ -37,11 +38,27 @@ export default function TaskForm(props: TaskFormProps) {
   );
 
   async function submit() {
-    await createTask.mutateAsync({
+    const newTask = await createTask.mutateAsync({
       id: props.task?.id,
       title: titleRef.current?.value,
       content: markdownRef.current?.getMarkdown(),
     });
+
+    if (!props.task?.id) {
+      utils.task.list.setData(undefined, (old) => ({
+        tasks: [...(old?.tasks ? old.tasks : []), newTask],
+      }));
+    } else {
+      utils.task.list.setData(undefined, (old) => ({
+        tasks: [...(old?.tasks ? old.tasks : [])].map((task) => {
+          if (task.id == props.task?.id) {
+            task.title = newTask.title;
+            task.content = newTask.content;
+          }
+          return task;
+        }),
+      }));
+    }
 
     props.onDone?.();
   }
@@ -50,6 +67,12 @@ export default function TaskForm(props: TaskFormProps) {
     await removeTask.mutateAsync({
       id: props.task?.id,
     });
+
+    utils.task.list.setData(undefined, (old) => ({
+      tasks: [...(old?.tasks ? old.tasks : [])].filter((task) => {
+        return task.id != props.task?.id;
+      }),
+    }));
 
     props.onDone?.();
   }
@@ -131,6 +154,12 @@ export default function TaskForm(props: TaskFormProps) {
             </Button>
           )}
         </div>
+
+        {(createTask.error || removeTask.error) && (
+          <div className="mt-8 text-red-500">
+            {createTask.error?.message || removeTask.error?.message}
+          </div>
+        )}
       </div>
     </div>
   );
