@@ -15,7 +15,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           'relative flex select-none items-center rounded border-conversion bg-conversion p-3.5 px-5 text-sm font-bold uppercase text-white transition-[padding] duration-300 hover:border-conversionHover hover:bg-conversionHover active:brightness-90',
           {
-            'pointer-events-none bg-conversionHover pr-12': loading,
+            'pointer-events-none bg-conversionHover pr-12 brightness-90':
+              loading,
             'pointer-events-none grayscale': disabled,
           },
           className,

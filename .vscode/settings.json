@@ -15,6 +15,9 @@
   "[css][less]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
   "search.exclude": {
     "**/node_modules": true,
     "**/.next": true,

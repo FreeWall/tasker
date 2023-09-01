@@ -1,4 +1,6 @@
+import Layout from '@/components/layout';
 import '@/styles/globals.css';
+import { trpc } from '@/utils/trpc';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { AppType } from 'next/app';
@@ -17,9 +19,11 @@ const App: AppType<{ session: Session }> = ({
         />
         <title>Tasker</title>
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 };
 
-export default App;
+export default trpc.withTRPC(App);

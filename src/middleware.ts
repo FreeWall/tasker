@@ -9,6 +9,10 @@ export default withAuth({
         return true;
       }
 
+      if (req.nextUrl.pathname.startsWith('/api/trpc/')) {
+        return true;
+      }
+
       return !!token;
     },
   },

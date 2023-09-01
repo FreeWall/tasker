@@ -1,14 +1,17 @@
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
+import { trpc } from '@/utils/trpc';
 import isEmpty from 'lodash/isEmpty';
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 
-export default function SignIn() {
+export default function SignUp() {
   const { status } = useSession();
   const router = useRouter();
+
+  const { mutateAsync: createUser } = trpc.user.create.useMutation();
 
   const [formStatus, setFormStatus] = useState<
     'loading' | 'error' | 'success' | undefined
@@ -21,7 +24,7 @@ export default function SignIn() {
     router.push('/');
   }
 
-  async function login() {
+  async function register() {
     if (!usernameRef.current?.value || isEmpty(usernameRef.current?.value)) {
       return;
     }
@@ -32,60 +35,71 @@ export default function SignIn() {
 
     setFormStatus('loading');
 
-    const data = await signIn('credentials', {
-      username: usernameRef.current?.value,
-      password: passwordRef.current?.value,
-      redirect: false,
-    });
+    try {
+      await createUser({
+        username: usernameRef.current.value,
+        password: passwordRef.current.value,
+      });
 
-    if (!data?.ok) {
+      const data = await signIn('credentials', {
+        username: usernameRef.current?.value,
+        password: passwordRef.current?.value,
+        redirect: false,
+      });
+
+      if (!data?.ok) {
+        setFormStatus('error');
+        return;
+      }
+
+      setFormStatus('success');
+    } catch (e) {
       setFormStatus('error');
       return;
     }
-
-    setFormStatus('success');
   }
 
   return (
     <div className="flex">
       <div className="mx-auto max-w-sm pt-32">
-        <h1 className="mb-6 text-2xl font-bold sm:mb-8 sm:text-3xl">Login</h1>
+        <h1 className="mb-6 text-2xl font-bold sm:mb-8 sm:text-3xl">
+          Create an account
+        </h1>
 
         <Input
           ref={usernameRef}
           label="Username"
           className="mb-5 w-[300px]"
-          onKeyDown={(e) => e.key == 'Enter' && login()}
+          onKeyDown={(e) => e.key == 'Enter' && register()}
         />
         <Input
           ref={passwordRef}
           label="Password"
           type="password"
           className="mb-10 w-[300px]"
-          onKeyDown={(e) => e.key == 'Enter' && login()}
+          onKeyDown={(e) => e.key == 'Enter' && register()}
         />
 
         <div className="flex items-center justify-between">
           <Button
             loading={formStatus == 'loading' || formStatus == 'success'}
-            onClick={() => login()}
+            onClick={() => register()}
           >
-            Login
+            Sign up
           </Button>
-          <Link
-            href="/auth/signup"
-            className="text-right text-sm"
-          >
+          <Link href="/auth/signin">
             <a className="text-right text-sm">
-              Don{"'"}t have an account?
+              Have an account?
               <br />
-              <b>Create one</b>
+              <b>Login</b>
             </a>
           </Link>
         </div>
 
         {formStatus == 'error' && (
-          <div className="mt-10 text-red-500">Bad credentials, try again.</div>
+          <div className="mt-10 text-red-500">
+            Something went wrong, try again.
+          </div>
         )}
       </div>
     </div>
