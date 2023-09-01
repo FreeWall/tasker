@@ -1,11 +1,17 @@
+import Layout from '@/components/layout';
 import '@/styles/globals.css';
 import { trpc } from '@/utils/trpc';
-import { AppProps, AppType } from 'next/app';
+import type { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
+import { AppType } from 'next/app';
 import Head from 'next/head';
 
-const App: AppType = ({ Component, pageProps }: AppProps) => {
+const App: AppType<{ session: Session }> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}) => {
   return (
-    <>
+    <SessionProvider session={session}>
       <Head>
         <meta
           name="viewport"
@@ -13,8 +19,10 @@ const App: AppType = ({ Component, pageProps }: AppProps) => {
         />
         <title>Tasker</title>
       </Head>
-      <Component {...pageProps} />
-    </>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SessionProvider>
   );
 };
 

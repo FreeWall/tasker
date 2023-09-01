@@ -18,9 +18,6 @@ module.exports = function next(stage) {
     distDir: stage == PHASE_DEVELOPMENT_SERVER ? '.next' : 'build',
     swcMinify: true,
     productionBrowserSourceMaps: true,
-    experimental: {
-      fallbackNodePolyfills: false,
-    },
     publicRuntimeConfig: {
       repository,
     },

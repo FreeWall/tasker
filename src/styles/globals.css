@@ -1,11 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '../components/ui/markdown/editor.css';
 
 html,
 body {
   font-family: 'Inter', sans-serif;
-  @apply bg-main antialiased text-body;
+  @apply bg-main text-body antialiased;
 }
 
 #__next {
@@ -15,4 +16,13 @@ body {
 .forceStroke > path,
 g {
   stroke: currentColor;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s;
 }

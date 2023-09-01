@@ -7,7 +7,19 @@
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "lodash",
+            "message": "Please use a specific lodash module, e.g. 'lodash/random'"
+          }
+        ]
+      }
+    ]
   },
   "ignorePatterns": ["**/*.js"],
   "plugins": ["@typescript-eslint"],
