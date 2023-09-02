@@ -8,9 +8,14 @@ export default router({
       where: {
         userId: session?.user.id,
       },
-      orderBy: {
-        id: 'asc',
-      },
+      orderBy: [
+        {
+          order: 'asc',
+        },
+        {
+          id: 'asc',
+        },
+      ],
     });
 
     return {
@@ -41,13 +46,45 @@ export default router({
         return task;
       }
 
+      const taskCount = await prisma.task.aggregate({
+        where: {
+          userId: session?.user.id,
+        },
+        _max: {
+          order: true,
+        },
+      });
+
       return await prisma.task.create({
         data: {
           title: input.title ?? '',
           content: input.content ?? '',
+          order: (taskCount._max.order ?? 0) + 1,
           userId: session?.user.id as string,
         },
       });
+    }),
+  updateOrder: procedure
+    .input(
+      z.array(
+        z.object({
+          id: z.number(),
+          order: z.number(),
+        }),
+      ),
+    )
+    .mutation(async ({ input, ctx: { session } }) => {
+      for (const task of input) {
+        await prisma.task.update({
+          where: {
+            id: task.id,
+            userId: session?.user.id,
+          },
+          data: {
+            order: task.order,
+          },
+        });
+      }
     }),
   remove: procedure
     .input(

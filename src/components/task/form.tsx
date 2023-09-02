@@ -78,6 +78,14 @@ export default function TaskForm(props: TaskFormProps) {
   }
 
   function discard() {
+    if (document.activeElement === titleRef.current) {
+      return;
+    }
+
+    if (document.activeElement?.className.includes('toastui-editor-contents')) {
+      return;
+    }
+
     if (
       ((props.task &&
         (props.task.content != markdownRef.current?.getMarkdown() ||

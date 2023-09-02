@@ -5,14 +5,50 @@ import { trpc } from '@/utils/trpc';
 import type Prisma from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CgSpinner } from 'react-icons/cg';
+import { ReactSortable } from 'react-sortablejs';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export default function Index() {
   const taskList = trpc.task.list.useQuery();
   const [formVisible, setFormVisible] = useState(false);
   const [formTask, setFormTask] = useState<Prisma.Task>();
+  const [sortedTasks, setSortedTasks] = useState(taskList.data?.tasks);
+  const [justSorted, setJustSorted] = useState(false);
+
+  const utils = trpc.useContext();
+  const updateOrder = trpc.task.updateOrder.useMutation();
+
+  useEffect(() => {
+    setSortedTasks(taskList.data?.tasks);
+  }, [taskList.data?.tasks]);
+
+  useEffect(() => {
+    if (justSorted) {
+      setJustSorted(false);
+
+      if (!sortedTasks) {
+        return;
+      }
+
+      const newTasks = sortedTasks.map((task, idx) => {
+        task.order = idx;
+        return task;
+      });
+
+      updateOrder.mutate(
+        newTasks.map((task) => ({
+          id: task.id,
+          order: task.order,
+        })),
+      );
+
+      utils.task.list.setData(undefined, () => ({
+        tasks: newTasks,
+      }));
+    }
+  }, [justSorted, sortedTasks, updateOrder, utils.task.list]);
 
   return (
     <div className="relative">
@@ -47,11 +83,23 @@ export default function Index() {
         </div>
       )}
 
-      {taskList.data?.tasks && (
-        <div className="flex flex-wrap">
-          {taskList.data?.tasks.map((task, idx) => (
+      {sortedTasks && (
+        <ReactSortable
+          animation={300}
+          className="flex flex-wrap"
+          list={sortedTasks}
+          setList={setSortedTasks}
+          onEnd={(e) => {
+            if (e.oldIndex == e.newIndex) {
+              return;
+            }
+
+            setJustSorted(true);
+          }}
+        >
+          {sortedTasks?.map((task) => (
             <Task
-              key={idx}
+              key={task.id}
               task={task}
               onClick={() => {
                 setFormTask(task);
@@ -59,7 +107,7 @@ export default function Index() {
               }}
             />
           ))}
-        </div>
+        </ReactSortable>
       )}
 
       {formVisible && (
