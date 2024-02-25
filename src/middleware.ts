@@ -1,14 +1,16 @@
 import { withAuth } from 'next-auth/middleware';
 
+// ahoj
+
 export default withAuth({
   callbacks: {
     authorized({ req, token }) {
       if (req.nextUrl.pathname.startsWith('/auth/')) {
-        return true;
+        return false;
       }
 
       if (req.nextUrl.pathname.startsWith('/api/trpc/')) {
-        return true;
+        return false;
       }
 
       return !!token;
