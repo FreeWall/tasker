@@ -34,7 +34,38 @@ jobs:
           autosquash: true
         env:
           GITHUB_TOKEN: ${{ secrets.REBASE_TOKEN }}
-      - name: Report status
+      - name: Report failed status
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const {data: comments} = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            console.log(typeof steps);
+
+            console.log(${{ steps }};
+                                                                                                    
+            const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: "✅ Rebased"
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: "✅ Rebased"
+              });
+            }
+      - name: Report success status
         uses: actions/github-script@v6
         with:
           script: |
