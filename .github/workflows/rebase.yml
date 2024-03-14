@@ -35,7 +35,7 @@ jobs:
           autosquash: true
         env:
           GITHUB_TOKEN: ${{ secrets.REBASE_TOKEN }}
-      - name: Report failed status
+      - name: Report status
         uses: actions/github-script@v6
         with:
           script: |
@@ -44,51 +44,37 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-
-            console.log((${{ steps.rebase.conclusion }}));
-            console.log(JSON.stringify(${{ steps.rebase.conclusion }}));
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
-
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: "✅ Rebased"
-              })
-            } else {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: "✅ Rebased"
-              });
+            
+            let body = "";
+            switch  ("${{ steps.rebase.conclusion }}") {
+              case "success":
+                body = "✅ Rebased";
+                break;
+              case "failure":
+                body = "❌ Rebasing failed, please rebase manually";
+                break;
+              case "cancelled":
+                body = "❌ Rebasing cancelled";
+                break;
+              case "skipped":
+                body = "❌ Rebasing skipped";
+                break;
             }
-      - name: Report success status
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const {data: comments} = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-                                                                                                    
-            const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
 
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: botComment.id,
-                body: "✅ Rebased"
+                body: body
               })
             } else {
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: "✅ Rebased"
+                body: body
               });
             }
