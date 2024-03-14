@@ -29,6 +29,7 @@ jobs:
           token: ${{ secrets.REBASE_TOKEN }}
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
       - name: Automatic Rebase
+        id: rebase
         uses: cirrus-actions/rebase@1.8
         with:
           autosquash: true
@@ -46,8 +47,8 @@ jobs:
 
             console.log(typeof steps);
 
-            console.log(Object.keys(${{ steps }}));
-            console.log(JSON.stringify(${{ steps }}));
+            console.log((${{ steps.rebase }}));
+            console.log(JSON.stringify(${{ steps.rebase }}));
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
 
