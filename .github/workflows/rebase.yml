@@ -38,8 +38,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            console.log("${{ failure() }}");
-
             const {data: comments} = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
