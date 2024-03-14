@@ -46,7 +46,7 @@ jobs:
 
             console.log(typeof steps);
 
-            console.log(${{ steps }};
+            console.log(${{ steps }});
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
 
