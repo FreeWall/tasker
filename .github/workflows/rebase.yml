@@ -21,7 +21,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "⌛ Rebasing: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              body: "⏳ Rebasing: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             })
       - name: Checkout the latest code
         uses: actions/checkout@v3
@@ -46,7 +46,8 @@ jobs:
 
             console.log(typeof steps);
 
-            console.log(${{ steps }});
+            console.log(Object.keys(${{ steps }}));
+            console.log(JSON.stringify(${{ steps }}));
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
 
