@@ -45,10 +45,8 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            console.log(typeof steps);
-
-            console.log((${{ steps.rebase }}));
-            console.log(JSON.stringify(${{ steps.rebase }}));
+            console.log((${{ steps.rebase.conclusion }}));
+            console.log(JSON.stringify(${{ steps.rebase.conclusion }}));
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
 
