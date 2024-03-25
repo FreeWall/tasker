@@ -46,7 +46,7 @@ jobs:
             });
             console.log(comments);
                                                                                                     
-            const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
+            const botComment = comments.find(comment => comment.user.login === "github-actions[bot]" && comment.body.includes(`/runs/${{ github.run_id }}`));
             
             let body = "";
             switch  ("${{ steps.rebase.conclusion }}") {
