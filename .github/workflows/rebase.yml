@@ -26,7 +26,7 @@ jobs:
       - name: Checkout the latest code
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.REBASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
       - name: Automatic Rebase
         id: rebase
@@ -34,7 +34,7 @@ jobs:
         with:
           autosquash: true
         env:
-          GITHUB_TOKEN: ${{ secrets.REBASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Report status
         uses: actions/github-script@v6
         with:
