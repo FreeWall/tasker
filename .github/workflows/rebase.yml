@@ -44,6 +44,7 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
+            console.log(comments);
                                                                                                     
             const botComment = comments.find(comment => comment.user.id === 41898282 && comment.body.includes(`/runs/${{ github.run_id }}`));
             
